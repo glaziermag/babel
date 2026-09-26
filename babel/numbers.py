@@ -1189,6 +1189,8 @@ def parse_decimal(
         # ... it's reasonable to assume it is taking the place of the grouping symbol.
         string = SPACE_CHARS_RE.sub(group_symbol, string)
 
+    if strict and '_' in string:
+        raise NumberFormatError(f"{string!r} is not a valid decimal number")
     try:
         parsed = decimal.Decimal(string.replace(group_symbol, '').replace(decimal_symbol, '.'))
     except decimal.InvalidOperation as exc:

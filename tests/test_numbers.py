@@ -579,6 +579,18 @@ def test_parse_decimal_group_separator_can_be_any_space(string):
     assert decimal.Decimal('1099.98') == numbers.parse_decimal(string, locale='fr')
 
 
+@pytest.mark.parametrize(('locale', 'string'), [
+    ('en_US', '1_000.50'),
+    ('en_US', '1__000.50'),
+    ('de', '1_000,50'),
+    ('de', '1.000,_50'),
+])
+def test_parse_decimal_strict_rejects_underscores(locale, string):
+    with pytest.raises(numbers.NumberFormatError, match='is not a valid decimal number'):
+        numbers.parse_decimal(string, locale=locale, strict=True)
+    assert numbers.parse_decimal(string, locale=locale) == decimal.Decimal('1000.50')
+
+
 def test_parse_grouping():
     assert numbers.parse_grouping('##') == (1000, 1000)
     assert numbers.parse_grouping('#,###') == (3, 3)
