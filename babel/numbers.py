@@ -593,6 +593,7 @@ def format_decimal(
     :raise `UnsupportedNumberingSystemError`: If the numbering system is not supported by the locale.
     """
     locale = Locale.parse(locale or LC_NUMERIC)
+    _get_number_symbols(locale, numbering_system=numbering_system)
     if format is None:
         format = locale.decimal_formats[format]
     pattern = parse_pattern(format)

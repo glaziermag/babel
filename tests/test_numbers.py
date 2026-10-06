@@ -213,6 +213,18 @@ def test_format_decimal():
         numbers.format_decimal(12345.5, locale='en_US', numbering_system="unknown")
 
 
+@pytest.mark.parametrize('number', [0, 1, 1.0001])
+@pytest.mark.parametrize('group_separator', [False, True])
+def test_format_decimal_unsupported_numbering_system_without_fraction(number, group_separator):
+    with pytest.raises(numbers.UnsupportedNumberingSystemError):
+        numbers.format_decimal(
+            number,
+            locale='en_US',
+            group_separator=group_separator,
+            numbering_system='unknown',
+        )
+
+
 @pytest.mark.parametrize(('input_value', 'expected_value'), [
     ('10000', '10,000'),
     ('1', '1'),
